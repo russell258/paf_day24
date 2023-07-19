@@ -15,7 +15,7 @@ public class BankAccountRepo {
     private final String WITHDRAW_SQL = "update bank_account set balance = balance - ? where id =?";
     private final String DEPOSIT_SQL = "update bank_account set balance = balance + ? where id = ?";
 
-    private final String CREATE_ACCOUNT_SQL = "insert into bank_account (full_name, is_blocked, is_active, account_type, balance) values (?,?,?,?,?)";
+    private final String CREATE_ACCOUNT_SQL = "insert into bank_account values (?,?,?,?,?,?)";
     
     public BankAccount getAccountById(Integer bankAccountId){
         BankAccount bankAccount = jdbcTemplate.queryForObject(GET_ACCOUNT_SQL, BeanPropertyRowMapper.newInstance(BankAccount.class),bankAccountId);
@@ -35,7 +35,7 @@ public class BankAccountRepo {
 
     public Boolean createAccount(BankAccount bankAccount){
 
-        Integer iResult = jdbcTemplate.update(CREATE_ACCOUNT_SQL, bankAccount.getFullName(), bankAccount.getIsBlocked(), 
+        Integer iResult = jdbcTemplate.update(CREATE_ACCOUNT_SQL, bankAccount.getId(), bankAccount.getFullName(), bankAccount.getIsBlocked(), 
                                         bankAccount.getIsActive(), bankAccount.getAccountType(), bankAccount.getBalance());
 
         return iResult > 0 ? true: false;

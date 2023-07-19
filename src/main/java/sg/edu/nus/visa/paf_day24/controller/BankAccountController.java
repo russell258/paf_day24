@@ -32,10 +32,16 @@ public class BankAccountController {
         return ResponseEntity.internalServerError().body(bAccountCreated);
     }
 
-    @GetMapping("/{account-id}")
+    @GetMapping(path="/{account-id}", produces = "application/json")
     public ResponseEntity<BankAccount> retrieveAccountById(@PathVariable("account-id") Integer bankAccountId){
         BankAccount bAccount = bankSvc.retrieveAccountById(bankAccountId);
         return new ResponseEntity<BankAccount>(bAccount, HttpStatus.OK);
+    }
+
+    @PostMapping("/transfer/{transferer-id}/receive/{receiver-id}/amount/{amount}")
+    public ResponseEntity<Boolean> paynow(@PathVariable("transferer-id")Integer transferAccountId, @PathVariable("receiver-id") Integer receiveAccountId, @PathVariable("amount") Float transferAmount){
+        boolean bTransferSuccess = bankSvc.transferMoney(transferAccountId, receiveAccountId, transferAmount);
+        return new ResponseEntity<Boolean>(bTransferSuccess,HttpStatus.OK);
     }
 
 }
